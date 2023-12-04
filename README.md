@@ -42,6 +42,11 @@ echo "$text"
 ## Configure qBittorrent
 
 - Open qBitTorrent at http://localhost:5080. Default username:password is admin:adminadmin
+```
+# If username:password is not admin:adminadmin check qbittorent
+# Expected output: The WebUI administrator password was not set. A temporary password is provided for this session: *********
+sudo docker logs qbittorrent
+```
 - Go to Tools --> Options --> WebUI --> Change password
 - Run below commands
 
