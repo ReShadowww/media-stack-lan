@@ -1,0 +1,127 @@
+version: "3.9"
+services:
+  qbittorrent:
+    ## Default credentials - Username: admin password: adminadmin ##
+    ## Change password after install from UI --> Tools --> Options --> WebUI ##
+    container_name: qbittorrent
+    image: linuxserver/qbittorrent:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+      - WEBUI_PORT=5080
+    volumes:
+      - /home/reshadow/my-media-stack/configs/qbittorrent:/config
+      - /home/reshadow/my-media-stack/torrent-downloads:/downloads
+    ports:
+      - 5080:5080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: "unless-stopped"
+
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    ports:
+      - 7878:7878
+    volumes:
+      - /home/reshadow/my-media-stack/configs/radarr:/config
+      - /home/reshadow/my-media-stack/torrent-downloads:/downloads
+      - /home/reshadow/my-media-stack/torrent-downloads/movies:/movies
+    restart: "unless-stopped"
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - /home/reshadow/my-media-stack/configs/sonarr:/config
+      - /home/reshadow/my-media-stack/torrent-downloads:/downloads
+      - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  prowlarr:
+    container_name: prowlarr
+    image: linuxserver/prowlarr:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - /home/reshadow/my-media-stack/configs/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  jellyseerr:
+    container_name: jellyseerr
+    image: fallenbagel/jellyseerr:latest
+    networks:
+      - media-stack-network
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Europe/Vilnius
+    ports:
+      - 5055:5055
+    volumes:
+      - /home/reshadow/my-media-stack/configs/jellyseerr:/app/config
+    restart: unless-stopped
+
+  jellyfin:
+    container_name: jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - /home/reshadow/my-media-stack/configs/jellyfin:/config
+      - /home/reshadow/my-media-stack/torrent-downloads/movies:/data/movies
+      - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/data/tvshows
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - /home/reshadow/my-media-stack/configs/bazarr:/config
+      - /home/reshadow/my-media-stack/torrent-downloads/movies:/movies #optional
+      - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv #optional
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+
+networks:
+  media-stack-network:
+    external: true
