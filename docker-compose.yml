@@ -20,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
-      - "traefik.http.routers.whoami.entrypoints=whoami"
+      - "traefik.http.routers.whoami.entrypoints=web"
       
   qbittorrent:
     ## Default credentials - Username: admin password: adminadmin ##
@@ -87,7 +87,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-      - "traefik.http.routers.sonarr.entrypoints=sonarr"
     restart: unless-stopped
 
   prowlarr:
