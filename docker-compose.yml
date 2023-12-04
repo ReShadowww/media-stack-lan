@@ -11,7 +11,8 @@ services:
       - "--entrypoints.web.address=:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    network_mode: host
+    networks:
+      - media-stack-network
     ports:
       - "80:80"
       - "8080:8080"
@@ -19,7 +20,8 @@ services:
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
-    network_mode: host
+    networks:
+      - media-stack-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
@@ -28,6 +30,8 @@ services:
   sonarr:
     container_name: sonarr
     image: linuxserver/sonarr:3.0.10
+    networks:
+      - media-stack-network
     # ports:
     #   - 8989:8989
     environment:
@@ -38,24 +42,27 @@ services:
       - /home/reshadow/my-media-stack/configs/sonarr:/config
       - /home/reshadow/my-media-stack/torrent-downloads:/downloads
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
-    network_mode: host
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       - "traefik.http.routers.sonarr.entrypoints=web"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
       - "traefik.http.routers.sonarr.service=sonarr"
+      - "traefik.port=8989"
       # - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       # - "traefik.http.routers.sonarr.entrypoints=web"
     #   - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
     #   - "traefik.http.routers.sonarr.entrypoints=web"
     # - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
     # - "traefik.docker.network=media-stack-network"
-      # - "traefik.port=8989"
+
     # - "traefik.docker.network=media-stack-network"
     #   - "traefik.http.routers.sonarr.service=sonarr"
     #   - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
     #   - "traefik.docker.network=media-stack-network"
     restart: unless-stopped
-
+    
+networks:
+  media-stack-network:
+    external: true
 
