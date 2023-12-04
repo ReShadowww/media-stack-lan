@@ -32,8 +32,8 @@ services:
     image: linuxserver/sonarr:3.0.10
     networks:
       - media-stack-network
-    ports:
-      - 8989:8989
+    # ports:
+    #   - 8989:8989
     environment:
       - PUID=1000
       - PGID=1000
@@ -50,6 +50,9 @@ services:
       # - "traefik.docker.network=media-stack-network"
       # - "traefik.port=8989"
       # - "traefik.docker.network=media-stack-network"
+      - "traefik.http.routers.sonarr.service=sonarr"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.docker.network=media-stack-network"
     restart: unless-stopped
 
  
