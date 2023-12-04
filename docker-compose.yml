@@ -2,15 +2,13 @@ version: "3.9"
 services:
   traefik:
     container_name: traefik
-    image: traefik:v3.0
+    image: traefik:v2.10
     command:
       #- "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-    networks:
-      - media-stack-network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
@@ -20,8 +18,6 @@ services:
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
-    networks:
-      - media-stack-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
@@ -30,10 +26,8 @@ services:
   sonarr:
     container_name: sonarr
     image: linuxserver/sonarr:3.0.10
-    networks:
-      - media-stack-network
-    # ports:
-    #   - 8989:8989
+    ports:
+      - 8989:8989
     environment:
       - PUID=1000
       - PGID=1000
@@ -42,20 +36,17 @@ services:
       - /home/reshadow/my-media-stack/configs/sonarr:/config
       - /home/reshadow/my-media-stack/torrent-downloads:/downloads
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
-      - "traefik.http.routers.sonarr.entrypoints=web"
-      # - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
-      # - "traefik.docker.network=media-stack-network"
-      # - "traefik.port=8989"
-      # - "traefik.docker.network=media-stack-network"
-      - "traefik.http.routers.sonarr.service=sonarr"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-      - "traefik.docker.network=media-stack-network"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
+    #   - "traefik.http.routers.sonarr.entrypoints=web"
+    # - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
+    # - "traefik.docker.network=media-stack-network"
+    # - "traefik.port=8989"
+    # - "traefik.docker.network=media-stack-network"
+    #   - "traefik.http.routers.sonarr.service=sonarr"
+    #   - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    #   - "traefik.docker.network=media-stack-network"
     restart: unless-stopped
 
- 
-networks:
-  media-stack-network:
-    external: true
+
