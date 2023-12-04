@@ -11,6 +11,7 @@ services:
       - "--entrypoints.web.address=:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    network_mode: host
     ports:
       - "80:80"
       - "8080:8080"
@@ -20,20 +21,9 @@ services:
     container_name: "simple-service"
     network_mode: host
     labels:
-      # - "traefik.enable=true"
-      # - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
-      # - "traefik.http.routers.whoami.entrypoints=web"
-
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
       - "traefik.http.routers.whoami.entrypoints=web"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80"
-      - "traefik.http.routers.whoami.service=whoami"
-
-      - "traefik.http.routers.whoami2.rule=PathPrefix(`/whoamii`)"
-      - "traefik.http.routers.whoami2.entrypoints=web"
-      - "traefik.http.services.whoami2.loadbalancer.server.port=80"
-      - "traefik.http.routers.whoami2.service=whoami2"
 
   sonarr:
     container_name: sonarr
@@ -55,15 +45,13 @@ services:
       - "traefik.http.routers.sonarr.entrypoints=web"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
       - "traefik.http.routers.sonarr.service=sonarr"
-      # - "traefik.enable=true"
       # - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       # - "traefik.http.routers.sonarr.entrypoints=web"
-    #   - "traefik.enable=true"
     #   - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
     #   - "traefik.http.routers.sonarr.entrypoints=web"
     # - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
     # - "traefik.docker.network=media-stack-network"
-    # - "traefik.port=8989"
+      # - "traefik.port=8989"
     # - "traefik.docker.network=media-stack-network"
     #   - "traefik.http.routers.sonarr.service=sonarr"
     #   - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
