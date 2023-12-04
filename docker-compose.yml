@@ -15,24 +15,25 @@ services:
       - "80:80"
       - "8080:8080"
       
-  # whoami:
-  #   image: "traefik/whoami"
-  #   container_name: "simple-service"
-  #   labels:
-  #     # - "traefik.enable=true"
-  #     # - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
-  #     # - "traefik.http.routers.whoami.entrypoints=web"
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    network_mode: host
+    labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
+      # - "traefik.http.routers.whoami.entrypoints=web"
 
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
-  #     - "traefik.http.routers.whoami.entrypoints=web"
-  #     - "traefik.http.services.whoami.loadbalancer.server.port=80"
-  #     - "traefik.http.routers.whoami.service=whoami"
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+      - "traefik.http.routers.whoami.service=whoami"
 
-  #     - "traefik.http.routers.whoami2.rule=PathPrefix(`/whoamii`)"
-  #     - "traefik.http.routers.whoami2.entrypoints=web"
-  #     - "traefik.http.services.whoami2.loadbalancer.server.port=80"
-  #     - "traefik.http.routers.whoami2.service=whoami2"
+      - "traefik.http.routers.whoami2.rule=PathPrefix(`/whoamii`)"
+      - "traefik.http.routers.whoami2.entrypoints=web"
+      - "traefik.http.services.whoami2.loadbalancer.server.port=80"
+      - "traefik.http.routers.whoami2.service=whoami2"
 
   sonarr:
     container_name: sonarr
@@ -47,6 +48,7 @@ services:
       - /home/reshadow/my-media-stack/configs/sonarr:/config
       - /home/reshadow/my-media-stack/torrent-downloads:/downloads
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
+    network_mode: host
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
