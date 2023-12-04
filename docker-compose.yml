@@ -7,13 +7,15 @@ services:
       #- "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.sonarr.address=:8989"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
       - "80:80"
       - "8080:8080"
+      
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
@@ -21,7 +23,29 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
       - "traefik.http.routers.whoami.entrypoints=web"
-      
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr:3.0.10
+    networks:
+      - media-stack-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vilnius
+    volumes:
+      - /home/reshadow/my-media-stack/configs/sonarr:/config
+      - /home/reshadow/my-media-stack/torrent-downloads:/downloads
+      - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
+    ports:
+      - 8989:8989
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.routers.sonarr.entrypoints=sonarr"
+    restart: unless-stopped
+    
   qbittorrent:
     ## Default credentials - Username: admin password: adminadmin ##
     ## Change password after install from UI --> Tools --> Options --> WebUI ##
@@ -67,27 +91,6 @@ services:
       - "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)"
       - "traefik.http.routers.radarr.entrypoints=web"
     restart: "unless-stopped"
-
-  sonarr:
-    container_name: sonarr
-    image: linuxserver/sonarr:3.0.10
-    networks:
-      - media-stack-network
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Vilnius
-    volumes:
-      - /home/reshadow/my-media-stack/configs/sonarr:/config
-      - /home/reshadow/my-media-stack/torrent-downloads:/downloads
-      - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
-    ports:
-      - 8989:8989
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-    restart: unless-stopped
 
   prowlarr:
     container_name: prowlarr
