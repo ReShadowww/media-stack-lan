@@ -1,27 +1,5 @@
 version: "3.9"
 services:
-  traefik:
-    container_name: traefik
-    image: traefik:v3.0
-    command:
-      #- "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    ports:
-      - "80:80"
-      - "8080:8080"
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-      
   qbittorrent:
     ## Default credentials - Username: admin password: adminadmin ##
     ## Change password after install from UI --> Tools --> Options --> WebUI ##
@@ -41,10 +19,6 @@ services:
       - 5080:5080
       - 6881:6881
       - 6881:6881/udp
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=PathPrefix(`/qbittorrent`)"
-      - "traefik.http.routers.qbittorrent.entrypoints=web"
     restart: "unless-stopped"
 
   radarr:
@@ -62,10 +36,6 @@ services:
       - /home/reshadow/my-media-stack/torrent-downloads/movies:/movies
     ports:
       - 7878:7878
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)"
-      - "traefik.http.routers.radarr.entrypoints=web"
     restart: "unless-stopped"
 
   sonarr:
@@ -83,11 +53,6 @@ services:
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
     ports:
       - 8989:8989
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
-      - "traefik.http.services.plex.loadbalancer.server.port=8989"
-      - "traefik.http.routers.sonarr.entrypoints=web"
     restart: unless-stopped
 
   prowlarr:
@@ -103,10 +68,6 @@ services:
       - /home/reshadow/my-media-stack/configs/prowlarr:/config
     ports:
       - 9696:9696
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prowlarr.rule=PathPrefix(`/prowlarr`)"
-      - "traefik.http.routers.prowlarr.entrypoints=web"
     restart: unless-stopped
 
   jellyseerr:
@@ -121,10 +82,6 @@ services:
       - /home/reshadow/my-media-stack/configs/jellyseerr:/app/config
     ports:
       - 5055:5055
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyseerr.rule=PathPrefix(`/jellyseerr`)"
-      - "traefik.http.routers.jellyseerr.entrypoints=web"
     restart: unless-stopped
 
   jellyfin:
@@ -145,10 +102,6 @@ services:
       - 8920:8920 #optional
       - 7359:7359/udp #optional
       - 1900:1900/udp #optional
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.rule=PathPrefix(`/jellyfin`)"
-      - "traefik.http.routers.jellyfin.entrypoints=web"
     restart: unless-stopped
 
   bazarr:
@@ -166,10 +119,6 @@ services:
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv #optional
     ports:
       - 6767:6767
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.bazarr.rule=PathPrefix(`/bazarr`)"
-      - "traefik.http.routers.bazarr.entrypoints=web"
     restart: unless-stopped
 
 
