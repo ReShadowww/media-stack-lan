@@ -19,7 +19,7 @@ A stack of self-hosted media managers:
 
 ```
 git clone https://github.com/ReShadowww/media-stack.git
-cd media-stack
+cd media-stack-lan
 sudo docker network create media-stack-network
 sudo docker compose up -d
 ```
