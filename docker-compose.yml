@@ -42,7 +42,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       - "traefik.http.routers.sonarr.entrypoints=web"
-      - "traefik.http.services.sonarr.loadBalancer.server.port=8989"
+      - "traefik.port=8989"
     restart: unless-stopped
     
   qbittorrent:
