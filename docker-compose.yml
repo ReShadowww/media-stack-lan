@@ -46,7 +46,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
       - "traefik.http.routers.sonarr.entrypoints=web"
-      - "traefik.http.routers.sonarr.service=sonarr"
     restart: unless-stopped
     
   qbittorrent:
