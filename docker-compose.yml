@@ -19,7 +19,7 @@ services:
     ## Default credentials - Username: admin password: adminadmin ##
     ## Change password after install from UI --> Tools --> Options --> WebUI ##
     container_name: qbittorrent
-    image: linuxserver/qbittorrent:4.6.2
+    image: linuxserver/qbittorrent:4.5.5
     networks:
       - media-stack-network
     environment:
