@@ -36,7 +36,10 @@ services:
       - /home/reshadow/my-media-stack/configs/sonarr:/config
       - /home/reshadow/my-media-stack/torrent-downloads:/downloads
       - /home/reshadow/my-media-stack/torrent-downloads/tv-series:/tv
-    # labels:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
+      - "traefik.http.routers.sonarr.entrypoints=web"
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
     #   - "traefik.http.routers.sonarr.entrypoints=web"
