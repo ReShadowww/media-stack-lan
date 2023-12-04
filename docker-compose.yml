@@ -45,8 +45,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
-      - "traefik.http.routers.sonarr.entrypoints=web"
-      - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
+      # - "traefik.http.routers.sonarr.entrypoints=web"
+      # - "traefik.http.services.whoami-https-service.loadbalancer.server.port=8989"
+      # - "traefik.docker.network=media-stack-network"
+      - "traefik.port=8989"
       - "traefik.docker.network=media-stack-network"
     restart: unless-stopped
     
