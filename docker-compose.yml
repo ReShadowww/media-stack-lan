@@ -9,7 +9,6 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.sonarr.address=:8989"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
@@ -42,7 +41,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)"
-      - "traefik.http.routers.sonarr.entrypoints=sonarr"
+      - "traefik.http.routers.sonarr.entrypoints=web"
+      - "traefik.http.services.sonarr.loadBalancer.server.port=8989"
     restart: unless-stopped
     
   qbittorrent:
