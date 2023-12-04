@@ -14,6 +14,13 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
+  whoami:
+    image: "traefik/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
       
   qbittorrent:
     ## Default credentials - Username: admin password: adminadmin ##
