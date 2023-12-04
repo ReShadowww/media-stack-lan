@@ -9,6 +9,8 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+    networks:
+      - media-stack-network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
@@ -18,6 +20,8 @@ services:
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
+    networks:
+      - media-stack-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=PathPrefix(`/whoami`)"
